@@ -11,13 +11,14 @@ use App\Entity\Journal;
 use App\Entity\Conference;
 use App\Entity\Note;
 
-class AccueilController extends AbstractController
+class RechercheController extends AbstractController
 {
+   
     /**
-     * @Route("/", name="homepage")
+     * @Route("/recherche", name="recherche")
      */
     public function index(Request $request)
-    {
+    {  
         $resultatsConf = ['succes' => 'init'];
         $resultatsJourn  = ['succes' => 'init'];
         $form = $this->createFormBuilder()
@@ -30,18 +31,18 @@ class AccueilController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $resultatsConf = $this->rechercheConf($form->getData()["recherche"]);
             $resultatsJourn = $this->rechercheJourn($form->getData()["recherche"]);
-            $notes = $this->getDoctrine()->getRepository(Note::class)->findAll();
-            return $this->render('recherche/recherche.html.twig', [
+        }else if(array_key_exists("recherche", $_GET) and $_GET['recherche']){
+            $resultatsConf = $this->rechercheConf($_GET['recherche']);
+            $resultatsJourn = $this->rechercheJourn($_GET['recherche']);
+        }
+
+        $notes = $this->getDoctrine()->getRepository(Note::Class)->findAll();
+
+        return $this->render('recherche/recherche.html.twig', [
                 'formRecherche' => $form->createView(),
                 'resultatsConf' => $resultatsConf,
                 'resultatsJourn' => $resultatsJourn,
                 'notes' => $notes
-        ]);
-        }
-
-        return $this->render('accueil/accueil.html.twig', [
-            'controller_name' => 'AccueilController',
-            'formRecherche' => $form->createView()
         ]);
     }
 
@@ -72,10 +73,6 @@ class AccueilController extends AbstractController
         return $resultats;
     }
 
-    // Recherche sur le plus de critères possibles (recherche avancées par exemple)
-    // Document : ne pas détailler l'installation des logiciels en eux mêmes mais simplement lesquels utilisés
-    // Le code doit être documenté
-    // Date de rendu : 15 Avril ou avant
     public function rechercheJourn($formInfo){
         $dbm = $this->getDoctrine()->getRepository(Journal::class);
         $journaux = $dbm->findAll();

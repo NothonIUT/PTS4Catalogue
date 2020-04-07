@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AfficheDetailsController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    {% if type == "journal" %}
+        <h2> {{ event.getTitreJourn() }} </h2>
+        <ul>
+            <li>Acronyme : {{ event.getAcroJourn() }}</li>
+            <li>Portée : {{ event.getPorteeJourn() }}</li>
+        </ul>
+        <h3> Attentes du journal : </h3>
+        <p> {{ event.getAttentesJourn() }} </p>
+        <h3> Notes : </h3>
+        <ul>
+        {% if notes|length == 0 %}
+            <p> Aucune note disponible pour ce journal </p>
+        {% endif %}
+
+        {% for note in notes %}
+            <li> {{note.getOrgNote()}} : {{note.getValNote()}} </li>
+        {% endfor %}
+        </ul>
+
+        <h3> Commentaire supplémentaire : </h3>
+        <p> {{ event.getCommJourn() }}</p>
+    {% endif %}
+
+    {% if type == "conference" %}
+        <h2> {{ event.getTitreConf() }} </h2>
+        <ul>
+            <li>Acronyme : {{ event.getAcroConf() }}</li>
+            <li>Périodicité : {{event.getPerioConf() }} </li>
+            <li>Portée : {{ event.getPorteeConf() }}</li>
+        </ul>
+        <h3> Attentes du journal : </h3>
+        <p> {{ event.getAttentesConf() }} </p>
+        <h3> Notes : </h3>
+        <ul>
+        {% if notes|length == 0 %}
+            <p> Aucune note disponible pour ce journal </p>
+        {% endif %}
+
+        {% for note in notes %}
+            <li> {{note.getOrgNote()}} : {{note.getValNote()}} </li>
+        {% endfor %}
+        </ul>
+
+        <h3> Commentaire supplémentaire : </h3>
+        <p> {{ event.getCommConf() }}</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+{% form_theme formRecherche 'bootstrap_4_layout.html.twig' %}
+{% block title %}Hello RechercheController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 2em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif;}
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h2> Recherche </h2>
+    {{ form_start(formRecherche) }}
+        {{ form_widget(formRecherche.recherche, {'attr': { 'placeholder': 'Termes à rechercher'} }) }}
+    {{ form_end(formRecherche)}}
+</div>
+
+<div class="example-wrapper">
+    {% if resultatsJourn['succes'] == "oui" %}
+        <h2> Résultats de la recherche </h2>
+        <h3> Journaux : </h3>
+        {% for journal in resultatsJourn %}
+            {% if journal != "oui" %}
+            <div class="result" style="border : 2px solid black;">
+                <p> {{ journal.getTitreJourn() }} </p>
+                <P> {{ journal.getAcroJourn() }}
+
+                <ul> Notes : 
+                {% for note in notes %}
+                    {% if note.getIdJourn() == journal %}
+                        <li> {{note.getOrgNote()}} : {{note.getValNote()}}
+                    {% endif %}
+                {% endfor %}
+                
+                </ul>
+                <button style = "margin-left : 78%; margin-bottom : 1%" > <a href={{ "affiche/journal/" ~ journal.getIdJourn() }}> Plus d'informations</a> </button>
+            </div>
+            <br>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+
+    {% if resultatsConf['succes'] == "oui" %}
+        <h2> Résultats de la recherche </h2>
+        <h3> Conférence : </h3>
+        {% for conference in resultatsConf %}
+            {% if conference != "oui" %}
+            <div class="result" style="border : 2px solid black;">
+                <p> {{ conference.getTitreConf() }} </p>
+                <P> {{ conference.getAcroConf() }}
+                <ul> Notes : 
+                {% for note in notes %}
+                    {% if note.getIdConf() == conference %}
+                        <li> {{note.getOrgNote()}} : {{note.getValNote()}}
+                    {% endif %}
+                {% endfor %}
+                </ul>
+                <button style = "margin-left : 78%; margin-bottom : 1%" > <a href={{ "affiche/conference/" ~ conference.getIdConf() }}> Plus d'informations</a> </button>
+            </div>
+            <br>
+        {% endif %}
+        {% endfor %}
+    {% endif %}
+
+    {% if resultatsConf['succes'] == "non" and resultatsJourn['succes'] == "non" %}
+        <p> Aucun résultat n'a pu être trouvé avec les termes utilisés </p>
+    {% endif %}
+</div>
+{% endblock %}

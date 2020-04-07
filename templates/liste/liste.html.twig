@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des évenements{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+<h2> Liste de tous les évenements répertoriés sur le site :</h2>
+<br>
+    <h2> Journaux et Revues scientifiques : </h2>
+    {% for journal in journaux %}
+        <div class="result" style="border : 2px solid black;">
+            <p> {{ journal.getTitreJourn() }} </p>
+            <P> {{ journal.getAcroJourn() }}
+             <ul> Notes : 
+                {% for note in notes %}
+                    {% if note.getIdJourn() == journal %}
+                        <li> {{note.getOrgNote()}} : {{note.getValNote()}}
+                    {% endif %}
+                {% endfor %}
+                </ul>
+                <button style = "margin-left : 78%; margin-bottom : 1%" > <a href={{ "affiche/journal/" ~ journal.getIdJourn() }}> Plus d'informations</a> </button>
+        </div>
+        <br>
+    {% endfor %}
+
+    <h2> Conférences Scientifiques : </h2>
+    {% for conference in conferences %}
+        <div class="result" style="border : 2px solid black;">
+            <p> {{ conference.getTitreConf() }} </p>
+            <P> {{ conference.getAcroConf() }}
+            <ul> Notes : 
+                {% for note in notes %}
+                    {% if note.getIdConf() == conference %}
+                        <li> {{note.getOrgNote()}} : {{note.getValNote()}}
+                    {% endif %}
+                {% endfor %}
+                </ul>
+                <button style = "margin-left : 78%; margin-bottom : 1%" > <a href={{ "affiche/conference/" ~ conference.getIdConf() }}> Plus d'informations</a> </button>
+        </div>
+        <br>
+    {% endfor %}
+</div>
+{% endblock %}
